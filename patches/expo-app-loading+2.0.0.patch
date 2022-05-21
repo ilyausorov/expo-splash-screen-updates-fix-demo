@@ -1,0 +1,30 @@
+diff --git a/node_modules/expo-app-loading/build/AppLoading.js b/node_modules/expo-app-loading/build/AppLoading.js
+index 80f9734..95a41c8 100644
+--- a/node_modules/expo-app-loading/build/AppLoading.js
++++ b/node_modules/expo-app-loading/build/AppLoading.js
+@@ -3,7 +3,7 @@ import NativeAppLoading from './AppLoadingNativeWrapper';
+ class AppLoading extends React.Component {
+     _isMounted = false;
+     componentDidMount() {
+-        console.warn(`expo-app-loading is deprecated in favor of expo-splash-screen: use SplashScreen.preventAutoHideAsync() and SplashScren.hideAsync() instead. https://docs.expo.dev/versions/latest/sdk/splash-screen/`);
++        // console.warn(`expo-app-loading is deprecated in favor of expo-splash-screen: use SplashScreen.preventAutoHideAsync() and SplashScren.hideAsync() instead. https://docs.expo.dev/versions/latest/sdk/splash-screen/`);
+         this._isMounted = true;
+         this.startLoadingAppResourcesAsync().catch((error) => {
+             console.error(`AppLoading threw an unexpected error when loading:\n${error}`);
+diff --git a/node_modules/expo-app-loading/src/AppLoading.tsx b/node_modules/expo-app-loading/src/AppLoading.tsx
+index e654c3e..8d1c85b 100644
+--- a/node_modules/expo-app-loading/src/AppLoading.tsx
++++ b/node_modules/expo-app-loading/src/AppLoading.tsx
+@@ -7,9 +7,9 @@ class AppLoading extends React.Component<AppLoadingProps> {
+   _isMounted: boolean = false;
+ 
+   componentDidMount() {
+-    console.warn(
+-      `expo-app-loading is deprecated in favor of expo-splash-screen: use SplashScreen.preventAutoHideAsync() and SplashScren.hideAsync() instead. https://docs.expo.dev/versions/latest/sdk/splash-screen/`
+-    );
++    // console.warn(
++    //   `expo-app-loading is deprecated in favor of expo-splash-screen: use SplashScreen.preventAutoHideAsync() and SplashScren.hideAsync() instead. https://docs.expo.dev/versions/latest/sdk/splash-screen/`
++    // );
+     this._isMounted = true;
+ 
+     this.startLoadingAppResourcesAsync().catch((error) => {
