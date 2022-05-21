@@ -1,0 +1,57 @@
+diff --git a/node_modules/expo-splash-screen/ios/EXSplashScreen.podspec b/node_modules/expo-splash-screen/ios/EXSplashScreen.podspec
+index d813e16..cf5906a 100644
+--- a/node_modules/expo-splash-screen/ios/EXSplashScreen.podspec
++++ b/node_modules/expo-splash-screen/ios/EXSplashScreen.podspec
+@@ -17,10 +17,10 @@ Pod::Spec.new do |s|
+   s.dependency 'ExpoModulesCore'
+   s.dependency 'React-Core'
+ 
+-  if !$ExpoUseSources&.include?(package['name']) && ENV['EXPO_USE_SOURCE'].to_i == 0 && File.exist?("#{s.name}.xcframework") && Gem::Version.new(Pod::VERSION) >= Gem::Version.new('1.10.0')
+-    s.source_files = "#{s.name}/**/*.h"
+-    s.vendored_frameworks = "#{s.name}.xcframework"
+-  else
++  # if !$ExpoUseSources&.include?(package['name']) && ENV['EXPO_USE_SOURCE'].to_i == 0 && File.exist?("#{s.name}.xcframework") && Gem::Version.new(Pod::VERSION) >= Gem::Version.new('1.10.0')
++    # s.source_files = "#{s.name}/**/*.h"
++    # s.vendored_frameworks = "#{s.name}.xcframework"
++  # else
+     s.source_files = "#{s.name}/**/*.{h,m}"
+-  end
++  # end
+ end
+diff --git a/node_modules/expo-splash-screen/ios/EXSplashScreen/EXSplashScreenService.m b/node_modules/expo-splash-screen/ios/EXSplashScreen/EXSplashScreenService.m
+index bc0e760..5d7db55 100644
+--- a/node_modules/expo-splash-screen/ios/EXSplashScreen/EXSplashScreenService.m
++++ b/node_modules/expo-splash-screen/ios/EXSplashScreen/EXSplashScreenService.m
+@@ -21,6 +21,8 @@ @interface EXSplashScreenService ()
+  */
+ @property (nonatomic, weak) UIViewController *observingRootViewController;
+ 
++@property (nonatomic, assign) BOOL showSplashScreenAgain;
++
+ @end
+ 
+ @implementation EXSplashScreenService
+@@ -71,10 +73,14 @@ - (void)showSplashScreenFor:(UIViewController *)viewController
+             successCallback:(void (^)(void))successCallback
+             failureCallback:(void (^)(NSString * _Nonnull))failureCallback
+ {
+-  if ([self.splashScreenControllers objectForKey:viewController]) {
++  if (!_showSplashScreenAgain && [self.splashScreenControllers objectForKey:viewController]) {
+     return failureCallback(@"'SplashScreen.show' has already been called for given view controller.");
+   }
+ 
++  if (_showSplashScreenAgain) {
++    _showSplashScreenAgain = NO;
++  }
++
+   [self.splashScreenControllers setObject:splashScreenController forKey:viewController];
+   [[self.splashScreenControllers objectForKey:viewController] showWithCallback:successCallback
+                                                                failureCallback:failureCallback];
+@@ -125,6 +131,7 @@ - (void)onAppContentWillReload:(UIViewController *)viewController
+   }
+   BOOL needsShow = [[self.splashScreenControllers objectForKey:viewController] needsShowOnAppContentWillReload];
+   if (needsShow) {
++    _showSplashScreenAgain = YES;
+     [self showSplashScreenFor:viewController
+        splashScreenController:[self.splashScreenControllers objectForKey:viewController]
+               successCallback:^{}
